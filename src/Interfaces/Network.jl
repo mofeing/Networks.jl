@@ -33,6 +33,20 @@ EdgePersistence(graph) = EdgePersistence(graph, DelegatorTrait(Network(), graph)
 EdgePersistence(graph, ::DelegateToField) = EdgePersistence(delegator(Network(), graph))
 EdgePersistence(graph, ::DontDelegate) = PruneEdges()
 
+"""
+    Directedness
+
+Trait for the directedness of a [`Network`](@ref). It defines whether the network is `Directed` or `Undirected`.
+"""
+abstract type Directedness end
+struct Directed <: Directedness end
+struct Undirected <: Directedness end
+# struct Hybrid <: Directedness end
+
+Directedness(graph) = Directedness(graph, DelegatorTrait(Network(), graph))
+Directedness(graph, ::DelegateToField) = Directedness(delegator(Network(), graph))
+Directedness(graph, ::DontDelegate) = throw(MethodError(Directedness, (graph,)))
+
 # query methods
 function vertices end
 function edges end
@@ -132,6 +146,35 @@ function edges_set_hyper end
 
 function vertex_at end
 function edge_at end
+
+# directed methods
+"""
+    edges_in(graph, v)
+
+Returns the edges incoming to vertex `v` in `graph`.
+"""
+function edges_in end
+
+"""
+    edges_out(graph, v)
+
+Returns the edges outgoing from vertex `v` in `graph`.
+"""
+function edges_out end
+
+"""
+    vertex_src(graph, g)
+
+Returns the source vertex of edge `e` in `graph`.
+"""
+function vertex_src end
+
+"""
+    vertex_dst(graph, e)
+
+Returns the destination vertex of edge `e` in `graph`.
+"""
+function vertex_dst end
 
 # mutating methods
 """
@@ -362,6 +405,26 @@ function edges_set_hyper(graph, ::DontDelegate)
     end
     return stranded_edges
 end
+
+## `edges_in`
+edges_in(graph, v) = edges_in(graph, v, DelegatorTrait(Network(), graph))
+edges_in(graph, v, ::DelegateToField) = edges_in(delegator(Network(), graph), v)
+edges_in(graph, v, ::DontDelegate) = throw(MethodError(edges_in, (graph, v)))
+
+## `edges_out`
+edges_out(graph, v) = edges_out(graph, v, DelegatorTrait(Network(), graph))
+edges_out(graph, v, ::DelegateToField) = edges_out(delegator(Network(), graph), v)
+edges_out(graph, v, ::DontDelegate) = throw(MethodError(edges_out, (graph, v)))
+
+## `vertex_src`
+vertex_src(graph, e) = vertex_src(graph, e, DelegatorTrait(Network(), graph))
+vertex_src(graph, e, ::DelegateToField) = vertex_src(delegator(Network(), graph), e)
+vertex_src(graph, e, ::DontDelegate) = throw(MethodError(vertex_src, (graph, e)))
+
+## `vertex_dst`
+vertex_dst(graph, e) = vertex_dst(graph, e, DelegatorTrait(Network(), graph))
+vertex_dst(graph, e, ::DelegateToField) = vertex_dst(delegator(Network(), graph), e)
+vertex_dst(graph, e, ::DontDelegate) = throw(MethodError(vertex_dst, (graph, e)))
 
 ## `addvertex!`
 # TODO check if vertex already exists

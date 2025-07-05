@@ -13,6 +13,9 @@ export edges, all_edges, edge_at, vertex_incidents, edge_type, hasedge, nedges, 
 export edges_set_strand, edges_set_open, edges_set_hyper
 export neighbors, vertex_neighbors, edge_neighbors
 
+export Directedness, Directed, Undirected
+export edges_in, edges_out, vertex_src, vertex_dst
+
 include("Interfaces/Taggable.jl")
 export tags, tag, hastag, tag_at, replace_tag!
 export vertex_tags, has_vertex_tag, tag_at_vertex, tag_vertex!, untag_vertex!, replace_vertex_tag!

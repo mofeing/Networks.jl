@@ -13,14 +13,25 @@ Using [`DelegatorTraits.jl`](https://github.com/bsc-quantic/DelegatorTraits.jl) 
 The `Network` interface abstracts a network or graph as a bipartite graph whose sets are the vertices and the edges.
 A type implementing the `Network` interface must implement the following methods:
 
-| Required method          | Description                                 |
-| :----------------------- | :------------------------------------------ |
-| `all_vertices(g)`        | Returns the list of vertices                |
-| `all_edges(g)`           | Returns the list of edges                   |
-| `edge_incidents(g, e)`   | Returns the vertices connected by edge `e`  |
-| `vertex_incidents(g, v)` | Returns the edges conected to vertex `v`    |
-| `vertex_neighbors(g, v)` | Returns the vertices neighboring vertex `v` |
-| `edge_neighbors(g, e)`   | Returns the edges neighboring edge `e`      |
+| Required method           | Description                                      |
+| :------------------------ | :----------------------------------------------- |
+| `all_vertices(g)`         | Returns the list of vertices                     |
+| `all_edges(g)`            | Returns the list of edges                        |
+| `edge_incidents(g, e)`    | Returns the vertices connected by edge `e`       |
+| `vertex_incidents(g, v)`  | Returns the edges conected to vertex `v`         |
+| `Directedness(::Type{G})` | Returns the directedness trait of graph type `G` |
+
+### Directed methods
+
+| Required method    | Description                                   |
+| :----------------- | :-------------------------------------------- |
+| `edges_in(g, v)`   | Returns the edges incoming to vertex `v`      |
+| `edges_out(g, v)`  | Returns the vertices outgoing from vertex `v` |
+| `vertex_src(g, e)` | Returns the source vertex of edge `e`         |
+| `vertex_dst(g, e)` | Returns the destination vertex of edge `e`    |
+
+!!! todo
+    What about hypergraphs? In such case, the source and destination of an edge can be multiple and thus, we should have a `vertices_src` and `vertices_dst` functions.
 
 ### Optional methods
 
