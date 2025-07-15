@@ -70,18 +70,20 @@ Returns the edges in the `graph`.
 function all_edges end
 
 """
-    edge_incidents(graph, e)
+    incident_vertices(graph, e)
 
 Returns the vertices connected by edge `e` in `graph`.
 """
-function edge_incidents end
+function incident_vertices end
+@deprecate edge_incidents(args...; kwargs...) incident_vertices(args...; kwargs...) true
 
 """
-    vertex_incidents(graph, v)
+    incident_edges(graph, v)
 
 Returns the edges connected to vertex `v` in `graph`.
 """
-function vertex_incidents end
+function incident_edges end
+@deprecate vertex_incidents(args...; kwargs...) incident_edges(args...; kwargs...) true
 
 """
     vertex_neighbors(graph, v)
@@ -149,32 +151,34 @@ function edge_at end
 
 # directed methods
 """
-    edges_in(graph, v)
+    incoming_edges(graph, v)
 
 Returns the edges incoming to vertex `v` in `graph`.
 """
-function edges_in end
+function incoming_edges end
 
 """
-    edges_out(graph, v)
+    outgoing_edges(graph, v)
 
 Returns the edges outgoing from vertex `v` in `graph`.
 """
-function edges_out end
+function outgoing_edges end
 
 """
-    vertex_src(graph, g)
+    source_vertex(graph, g)
 
 Returns the source vertex of edge `e` in `graph`.
 """
-function vertex_src end
+function source_vertex end
 
 """
-    vertex_dst(graph, e)
+    destination_vertex(graph, e)
 
 Returns the destination vertex of edge `e` in `graph`.
 """
-function vertex_dst end
+function destination_vertex end
+
+# TODO `neighbor_vertices`, `neighbor_edges`, `predecessor_vertices`, `successor_vertices`
 
 # mutating methods
 """
@@ -258,15 +262,15 @@ all_edges(graph) = all_edges(graph, DelegatorTrait(Network(), graph))
 all_edges(graph, ::DelegateToField) = all_edges(delegator(Network(), graph))
 all_edges(graph, ::DontDelegate) = throw(MethodError(all_edges, (graph,)))
 
-## `edge_incidents`
-edge_incidents(graph, e) = edge_incidents(graph, e, DelegatorTrait(Network(), graph))
-edge_incidents(graph, e, ::DelegateToField) = edge_incidents(delegator(Network(), graph), e)
-edge_incidents(graph, e, ::DontDelegate) = throw(MethodError(edge_incidents, (graph, e)))
+## `incident_vertices`
+incident_vertices(graph, e) = incident_vertices(graph, e, DelegatorTrait(Network(), graph))
+incident_vertices(graph, e, ::DelegateToField) = incident_vertices(delegator(Network(), graph), e)
+incident_vertices(graph, e, ::DontDelegate) = throw(MethodError(incident_vertices, (graph, e)))
 
-## `vertex_incidents`
-vertex_incidents(graph, v) = vertex_incidents(graph, v, DelegatorTrait(Network(), graph))
-vertex_incidents(graph, v, ::DelegateToField) = vertex_incidents(delegator(Network(), graph), v)
-vertex_incidents(graph, v, ::DontDelegate) = throw(MethodError(vertex_incidents, (graph, v)))
+## `incident_edges`
+incident_edges(graph, v) = incident_edges(graph, v, DelegatorTrait(Network(), graph))
+incident_edges(graph, v, ::DelegateToField) = incident_edges(delegator(Network(), graph), v)
+incident_edges(graph, v, ::DontDelegate) = throw(MethodError(incident_edges, (graph, v)))
 
 ## `vertex_neighbors`
 vertex_neighbors(graph, v) = vertex_neighbors(graph, v, DelegatorTrait(Network(), graph))
@@ -369,7 +373,7 @@ function edges_set_strand(graph, ::DontDelegate)
     fallback(edges_set_strand)
     stranded_edges = Set{edge_type(graph)}()
     for edge in edges(graph)
-        vertex_set = edge_incidents(graph, edge)
+        vertex_set = incident_vertices(graph, edge)
         if length(vertex_set) == 0
             push!(stranded_edges, edge)
         end
@@ -384,7 +388,7 @@ function edges_set_open(graph, ::DontDelegate)
     fallback(edges_set_open)
     stranded_edges = Set{edge_type(graph)}()
     for edge in edges(graph)
-        vertex_set = edge_incidents(graph, edge)
+        vertex_set = incident_vertices(graph, edge)
         if length(vertex_set) == 1
             push!(stranded_edges, edge)
         end
@@ -398,7 +402,7 @@ edges_set_hyper(graph, ::DelegateToField) = edges_set_hyper(delegator(Network(),
 function edges_set_hyper(graph, ::DontDelegate)
     stranded_edges = Set{edge_type(graph)}()
     for edge in edges(graph)
-        vertex_set = edge_incidents(graph, edge)
+        vertex_set = incident_vertices(graph, edge)
         if length(vertex_set) > 2
             push!(stranded_edges, edge)
         end
@@ -406,25 +410,25 @@ function edges_set_hyper(graph, ::DontDelegate)
     return stranded_edges
 end
 
-## `edges_in`
-edges_in(graph, v) = edges_in(graph, v, DelegatorTrait(Network(), graph))
-edges_in(graph, v, ::DelegateToField) = edges_in(delegator(Network(), graph), v)
-edges_in(graph, v, ::DontDelegate) = throw(MethodError(edges_in, (graph, v)))
+## `incoming_edges`
+incoming_edges(graph, v) = incoming_edges(graph, v, DelegatorTrait(Network(), graph))
+incoming_edges(graph, v, ::DelegateToField) = incoming_edges(delegator(Network(), graph), v)
+incoming_edges(graph, v, ::DontDelegate) = throw(MethodError(incoming_edges, (graph, v)))
 
-## `edges_out`
-edges_out(graph, v) = edges_out(graph, v, DelegatorTrait(Network(), graph))
-edges_out(graph, v, ::DelegateToField) = edges_out(delegator(Network(), graph), v)
-edges_out(graph, v, ::DontDelegate) = throw(MethodError(edges_out, (graph, v)))
+## `outgoing_edges`
+outgoing_edges(graph, v) = outgoing_edges(graph, v, DelegatorTrait(Network(), graph))
+outgoing_edges(graph, v, ::DelegateToField) = outgoing_edges(delegator(Network(), graph), v)
+outgoing_edges(graph, v, ::DontDelegate) = throw(MethodError(outgoing_edges, (graph, v)))
 
-## `vertex_src`
-vertex_src(graph, e) = vertex_src(graph, e, DelegatorTrait(Network(), graph))
-vertex_src(graph, e, ::DelegateToField) = vertex_src(delegator(Network(), graph), e)
-vertex_src(graph, e, ::DontDelegate) = throw(MethodError(vertex_src, (graph, e)))
+## `source_vertex`
+source_vertex(graph, e) = source_vertex(graph, e, DelegatorTrait(Network(), graph))
+source_vertex(graph, e, ::DelegateToField) = source_vertex(delegator(Network(), graph), e)
+source_vertex(graph, e, ::DontDelegate) = throw(MethodError(source_vertex, (graph, e)))
 
-## `vertex_dst`
-vertex_dst(graph, e) = vertex_dst(graph, e, DelegatorTrait(Network(), graph))
-vertex_dst(graph, e, ::DelegateToField) = vertex_dst(delegator(Network(), graph), e)
-vertex_dst(graph, e, ::DontDelegate) = throw(MethodError(vertex_dst, (graph, e)))
+## `destination_vertex`
+destination_vertex(graph, e) = destination_vertex(graph, e, DelegatorTrait(Network(), graph))
+destination_vertex(graph, e, ::DelegateToField) = destination_vertex(delegator(Network(), graph), e)
+destination_vertex(graph, e, ::DontDelegate) = throw(MethodError(destination_vertex, (graph, e)))
 
 ## `addvertex!`
 # TODO check if vertex already exists
@@ -465,7 +469,7 @@ rmvertex!(graph, v, ::DontDelegate) = throw(MethodError(rmvertex!, (graph, v)))
 #     checkeffect(graph, RemoveVertexEffect(v))
 
 #     # trait is to remove edges on vertex removal
-#     for edge in vertex_incidents(graph, v)
+#     for edge in incident_edges(graph, v)
 #         rmedge!(graph, edge)
 #     end
 
@@ -479,8 +483,8 @@ rmvertex!(graph, v, ::DontDelegate) = throw(MethodError(rmvertex!, (graph, v)))
 
 #     # trait is to remove edges on vertex removal if that leaves them stranded
 #     # (i.e. no open indices left)
-#     for edge in vertex_incidents(graph, v)
-#         if length(edge_incidents(graph, edge)) == 1
+#     for edge in incident_edges(graph, v)
+#         if length(incident_vertices(graph, edge)) == 1
 #             rmedge!(graph, edge)
 #         end
 #     end

@@ -71,8 +71,8 @@ Networks.vertices(g::MockNetwork) = vertices(g.g)
 Networks.edges(g::MockNetwork) = edges(g.g)
 Networks.all_vertices(g::MockNetwork) = vertices(g.g)
 Networks.all_edges(g::MockNetwork) = edges(g.g)
-Networks.edge_incidents(g::MockNetwork, edge) = edge_incidents(g.g, edge)
-Networks.vertex_incidents(g::MockNetwork, vertex) = vertex_incidents(g.g, vertex)
+Networks.incident_vertices(g::MockNetwork, edge) = incident_vertices(g.g, edge)
+Networks.incident_edges(g::MockNetwork, vertex) = incident_edges(g.g, vertex)
 Networks.vertex_type(g::MockNetwork) = vertex_type(g.g)
 Networks.edge_type(g::MockNetwork) = edge_type(g.g)
 
@@ -103,26 +103,26 @@ end
     end
 end
 
-@testset "edge_incidents" begin
+@testset "incident_vertices" begin
     @testset "$(typeof(network))" for network in [
         IncidentNetwork(fixture.vertex_map, fixture.edge_map),
         WrapNetwork(fixture.vertex_map, fixture.edge_map),
         MockNetwork(fixture.vertex_map, fixture.edge_map),
     ]
         for (edge, vertex_set) in fixture.edge_map
-            @test issetequal(edge_incidents(network, edge), vertex_set)
+            @test issetequal(incident_vertices(network, edge), vertex_set)
         end
     end
 end
 
-@testset "vertex_incidents" begin
+@testset "incident_edges" begin
     @testset "$(typeof(network))" for network in [
         IncidentNetwork(fixture.vertex_map, fixture.edge_map),
         WrapNetwork(fixture.vertex_map, fixture.edge_map),
         MockNetwork(fixture.vertex_map, fixture.edge_map),
     ]
         for (vertex, edge_set) in fixture.vertex_map
-            @test issetequal(vertex_incidents(network, vertex), edge_set)
+            @test issetequal(incident_edges(network, vertex), edge_set)
         end
     end
 end

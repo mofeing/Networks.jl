@@ -35,8 +35,8 @@ edges(g::SimpleNetwork) = SimpleEdgeIter(g)
 all_vertices(g::SimpleNetwork) = 1:length(g.fadjlist)
 all_edges(g::SimpleNetwork) = SimpleEdgeIter(g)
 
-edge_incidents(::SimpleNetwork, e::SimpleEdge) = [e.v1, e.v2]
-vertex_incidents(g::SimpleNetwork, v) = map(dst -> SimpleEdge(v, dst), g.fadjlist[v])
+incident_vertices(g::SimpleNetwork, e::SimpleEdge) = [e.v1, e.v2]
+incident_edges(g::SimpleNetwork, v) = g.fadjlist[v]
 
 vertex_neighbors(g::SimpleNetwork, v) = g.fadjlist[v]
 function edge_neighbors(g::SimpleNetwork, e::SimpleEdge)
