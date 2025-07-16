@@ -291,10 +291,10 @@ neighbor_vertices(graph, v) = neighbor_vertices(graph, v, DelegatorTrait(Network
 neighbor_vertices(graph, v, ::DelegateToField) = neighbor_vertices(delegator(Network(), graph), v)
 function neighbor_vertices(graph, v, ::DontDelegate)
     fallback(neighbor_vertices)
-    incident_edges = vertex_incidents(graph, v)
+    incident_edges = incident_edges(graph, v)
     neighbors = Set{vertex_type(graph)}()
     for edge in incident_edges
-        edge_vertices = edge_incidents(graph, edge)
+        edge_vertices = incident_vertices(graph, edge)
         for neighbor in edge_vertices
             if neighbor != v
                 push!(neighbors, neighbor)
@@ -309,10 +309,10 @@ neighbor_edges(graph, e) = neighbor_edges(graph, e, DelegatorTrait(Network(), gr
 neighbor_edges(graph, e, ::DelegateToField) = neighbor_edges(delegator(Network(), graph), e)
 function neighbor_edges(graph, e, ::DontDelegate)
     fallback(neighbor_edges)
-    incident_vertices = edge_incidents(graph, e)
+    incident_vertices = incident_vertices(graph, e)
     neighbors = Set{edge_type(graph)}()
     for vertex in incident_vertices
-        vertex_edges = vertex_incidents(graph, vertex)
+        vertex_edges = incident_edges(graph, vertex)
         for neighbor in vertex_edges
             if neighbor != e
                 push!(neighbors, neighbor)

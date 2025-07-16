@@ -37,8 +37,8 @@ incident_edges(graph::IncidentNetwork, v) = graph.vertexmap[v]
 
 function neighbor_vertices(graph::IncidentNetwork, v)
     neighbors = Set{typeof(v)}()
-    for edge in vertex_incidents(graph, v)
-        for neighbor in edge_incidents(graph, edge)
+    for edge in incident_edges(graph, v)
+        for neighbor in incident_vertices(graph, edge)
             if neighbor != v
                 push!(neighbors, neighbor)
             end
@@ -49,8 +49,8 @@ end
 
 function neighbor_edges(graph::IncidentNetwork, e)
     neighbors = Set{typeof(e)}()
-    for vertex in edge_incidents(graph, e)
-        for neighbor in vertex_incidents(graph, vertex)
+    for vertex in incident_vertices(graph, e)
+        for neighbor in incident_edges(graph, vertex)
             if neighbor != e
                 push!(neighbors, neighbor)
             end
