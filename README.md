@@ -5,7 +5,10 @@
 [![Documentation: dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://bsc-quantic.github.io/Networks.jl/dev/)
 
 > [!WARNING]
->  Networks.jl is still experimental, and the API can change. 
+>  Networks.jl is still experimental, and the API can change.
+
+> [!NOTE]
+> This is an updated and maintained fork of [bsc-quantic/Networks.jl](https://github.com/mofeing/Networks.jl).
 
 Networks.jl is a work-in-progress, alternative graph library in Julia. Designed to overcome the limitations of [Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) when custom graphs, hyperedges, multi-edges, or arbitrary vertex types are needed.
 
