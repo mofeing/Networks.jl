@@ -8,8 +8,7 @@ During the development of [Tenet.jl](https://github.com/bsc-quantic/Tenet.jl), s
 
 - Support for hyperedges, open edges, and multi-edges
 - Graph types based on the incidence matrix
-- Automatic method delegation for wrapping graph types, based on [DelegatorTraits.jl](https://github.com/bsc-quantic/DelegatorTraits.jl)
-- Allowing vertices of any type, not just integers
+- Vertices of any type, not just `Integer`s
 - Interfaces that are extensible and better decoupled from concrete implementations
 
 ### The Edge entity
